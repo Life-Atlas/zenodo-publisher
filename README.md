@@ -1,6 +1,6 @@
 # zenodo-publish
 
-Markdown to Zenodo DOI in one command.
+Markdown to Zenodo DOI in one command — with AI-powered multi-agent peer review.
 
 ```bash
 python publish.py --file paper.md --title "My Paper" --description "Abstract here"
@@ -113,6 +113,48 @@ The tool tries two PDF backends:
 1. **WeasyPrint** (recommended) — styled HTML-to-PDF with proper typography. Needs system libraries (`libpango`, `libcairo`). Native on Linux/Mac, requires [GTK for Windows](https://doc.courtbouillon.org/weasyprint/stable/first_steps.html#installation).
 
 2. **ReportLab** (fallback) — pure Python, works everywhere, basic formatting. Install with `pip install reportlab`.
+
+## AI Peer Review
+
+Before publishing, run your article through 5 parallel AI reviewers:
+
+```bash
+# Standalone (requires ANTHROPIC_API_KEY)
+python review.py --file paper.md --threshold 9.0
+
+# Output:
+#   STS / Theoretical Rigour: 8.5/10
+#   Engineering / Technical:  8.0/10
+#   IS / Management:          9.0/10
+#   Domain Expert:            8.5/10
+#   Quality / APA:            9.0/10
+#   
+#   COMPOSITE: 8.6
+#   RATING: MINOR REVISION
+#   ✗ BELOW threshold (9.0). Revision needed. Gap: 0.4 points
+```
+
+Five reviewer personas score across weighted dimensions:
+
+| Dimension | Weight | What It Measures |
+|-----------|--------|-----------------|
+| STS / Theoretical Rigour | 25% | Frameworks applied, not just cited |
+| Engineering / Technical | 20% | Claims supported, architecture coherent |
+| IS / Management | 15% | Benefits-driven, falsifiable methodology |
+| Domain Relevance | 20% | Practitioners would use this |
+| Quality / APA | 20% | Formatting, references, tone |
+
+The review → fix → re-review loop typically improves articles from 5-6 (first draft) to 8.5+ within 3-4 rounds.
+
+See [SCORING.md](SCORING.md) for the full rubric and [CLAUDE_CODE_USAGE.md](CLAUDE_CODE_USAGE.md) for Claude Code integration.
+
+```bash
+# Save full review as JSON
+python review.py --file paper.md --output review.json
+
+# Use a different model
+python review.py --file paper.md --model claude-opus-4-6
+```
 
 ## GitHub Actions
 
