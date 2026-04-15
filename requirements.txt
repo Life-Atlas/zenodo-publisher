@@ -1,0 +1,12 @@
+requests>=2.28
+python-dotenv>=1.0
+markdown>=3.4
+
+# PDF conversion — pick ONE:
+
+# Option A: Best quality (needs system libs on Windows; native on Linux/Mac)
+# pip install weasyprint
+# weasyprint>=60
+
+# Option B: Works everywhere (pure Python)
+reportlab>=4.0
