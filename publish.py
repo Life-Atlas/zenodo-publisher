@@ -48,7 +48,7 @@ ZENODO_SANDBOX = "https://sandbox.zenodo.org/api"
 DEFAULT_CREATOR = {
     "name": "Waern, Nicolas",
     "affiliation": "WINNIIO AB",
-    "orcid": "0000-0001-7970-2707",
+    "orcid": "0009-0001-4011-8201",
 }
 DEFAULT_LICENSE = "cc-by-4.0"
 

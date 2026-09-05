@@ -17,6 +17,18 @@ python publish.py --file paper.md --title "My Paper" --description "Abstract her
 
 Your paper is immediately citable, indexed by DataCite, and (if linked) auto-harvested by ORCID.
 
+## Before you publish: author identity and record hygiene
+
+Read this section before every deposit. It exists because SMILE v6.5.0 went out on 3 September 2026 with the wrong ORCID, five months after the right one had been established.
+
+**The author's ORCID is `0009-0001-4011-8201`.** It is the maintained record (profile built April 2026: biography, 11 employments, 6 works). `0000-0001-7970-2707` is an empty account from 2013 that resolves to the same name and must never be used. `publish.py`'s default creator carries the right one; if you pass `--creator`, pass the right one. As of 5 September 2026 every record in the account (150, all versions) carries `0009-0001-4011-8201`; 51 of them were corrected that day by metadata edit.
+
+**Metadata on a published record can be corrected without a new version.** The sequence against `https://zenodo.org/api/deposit/depositions/<id>` is `POST actions/edit` → `GET` the deposition → change `metadata` → `PUT` `{"metadata": …}` with the `doi` and `prereserve_doi` keys removed → `POST actions/publish`. It works on superseded versions too. Use it for an ORCID, a typo, a keyword; use a new version only when a file changes.
+
+**A new version with binary files (DOCX + PDF) does not go through `publish.py`,** which converts Markdown and uploads one PDF. The REST sequence is `POST <id>/actions/newversion` → `GET` the `latest_draft` → delete the inherited files → `PUT` each file to the draft's `bucket` → `PUT` metadata (`version`, `publication_date`, `creators`, `description`; never a `doi`) → `POST actions/publish` → `GET /api/records/<new id>` and check `version` and `creators[0].orcid` before calling it done. A working script is kept with the SMILE build kit at `OneDrive - Winniio AB\WINNIIO 2026\SMILE\01-Current\v6.5.0-build\publish_v650.py` (`--src <record> --version <x.y.z>`).
+
+**SMILE lives under concept DOI `10.5281/zenodo.20175405`.** Cite the concept DOI for "latest"; cite a version record only when the sentence is about that version. Current: v6.5.1, record 22369538 (5 September 2026). The winniio-site repo checks its own text against Zenodo's latest version (`scripts/check-smile-version.mjs`) after every SMILE publish.
+
 ## Setup
 
 ```bash
@@ -189,6 +201,6 @@ MIT
 
 ## Author
 
-Nicolas Waern — [WINNIIO AB](https://winniio.io) — [ORCID](https://orcid.org/0000-0001-7970-2707)
+Nicolas Waern — [WINNIIO AB](https://winniio.io) — [ORCID](https://orcid.org/0009-0001-4011-8201)
 
 Built as part of the [Life Atlas](https://lifeatlas.online) research programme.
